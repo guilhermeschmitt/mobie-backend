@@ -1,0 +1,32 @@
+import morgan from 'morgan'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import express from 'express'
+import config from '@/config.json'
+import initializeDb from '@/db'
+import auth from '@/api/rest/v1/auth'
+import apiv1 from '@/api/rest/v1'
+import graphql from '@/api/graphql/v1'
+
+/* Server config */
+let app = express()
+app.use(morgan('dev'))
+app.use(cors({ exposedHeaders: config.corsHeaders }))
+app.use(bodyParser.json({ limit: config.bodyLimit }))
+
+const settings = {
+  schema: process.env.DB_SCHEMA,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS
+}
+
+initializeDb(settings, (db) => {
+  // auth
+  app.use('/auth', auth({ config, db }))
+
+  // apiv1 router
+  app.use('/api/rest/v1', apiv1({ config, db }))
+  app.use('/api/graphql/v1', graphql({ config, db }))
+
+  app.listen(process.env.PORT, () => console.log(`http://localhost:${process.env.PORT}/ `))
+})
