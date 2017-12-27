@@ -59,7 +59,7 @@ describe('DB Model', function () {
 
     global.Promise.all([saveBook, saveAuthor]).then(([savedBook, savedAuthor]) => {
       savedBook.addAuthor(savedAuthor).then(() => {
-        db.Book.find({ where: { id: savedBook.id }, include: [{ model: db.Author }] }).then((user) => {
+        db.Book.find({ where: { id: savedBook.id }, include: [{ model: db.Author }] }).then(() => {
           done()
         })
       })
@@ -72,6 +72,12 @@ describe('DB Model', function () {
     await savedVote.setBook(savedBook)
     const votedBook = await  savedVote.getBook()
     should.equal(votedBook.id, savedBook.id)
+  })
+
+  it.only('save => should not allow duplicate vote', async () => {
+    const savedBook = await db.Book.create(book)
+    const savedUser = await db.Book.create(user)
+    const savedVote = await db.Vote.create({rating: 5, userId: savedUser.id, bookId: savedBook.id})
   })
 
 })

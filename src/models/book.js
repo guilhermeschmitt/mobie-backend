@@ -4,7 +4,7 @@ export default (sequelize) => {
   const Book = sequelize.define('book', {
     id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
     title: Sequelize.STRING,
-    release: Sequelize.TIME,
+    release: Sequelize.DATE,
     isbn: Sequelize.STRING
   })
 

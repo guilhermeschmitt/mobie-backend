@@ -29,12 +29,8 @@ export default ({ schema, username, password, clear = false }, callback) => {
   sequelize.Book.belongsTo(sequelize.Genre, { foreignKey: { name: 'genreId', constraint: true }, targetKey: 'id' })
 
   sequelize.Vote.belongsTo(sequelize.Book, { foreignKey: { constraint: true }, targetKey: 'id' })
-
   sequelize.Vote.belongsTo(sequelize.User, { foreignKey: { constraint: true }, targetKey: 'id' })
   sequelize.User.hasMany(sequelize.Vote)
-
-  // sequelize.Book.belongsToMany(sequelize.User, { through: sequelize.Vote, constraint: true })
-  // sequelize.User.belongsToMany(sequelize.Book, { through: sequelize.Vote, constraint: true })
 
   const AuthorBook = sequelize.define('AuthorBook')
   sequelize.Book.belongsToMany(sequelize.Author, { through: AuthorBook })
