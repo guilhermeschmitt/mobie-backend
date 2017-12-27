@@ -3,7 +3,6 @@ const mysql = require('mysql')
 
 module.exports = {
   clear: ({ host, schema, user, password }, callback) => {
-    console.log(host, schema, user, password )
     const con = mysql.createConnection({ host, user, password })
     con.connect(err => {
       if(err) throw err
