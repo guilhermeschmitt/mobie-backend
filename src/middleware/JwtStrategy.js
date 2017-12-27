@@ -13,7 +13,7 @@ export default ({ db }) => {
   const userService = new UserService(db)
   return new Strategy(params, (payload, done) => {
     userService.findById(payload.id).then(user => {
-      return (user) ? done(null, { id: user.id }) : done(new Error("User not found"), null)
+      return user ? done(null, { id: user.id }) : done(null, false, { message: 'Unauthorized' })
     })
   })
 }

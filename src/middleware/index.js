@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import passport from 'passport'
 import JwtStrategy from './JwtStrategy'
-import _ from 'lodash'
 
 export default ({ config, db }) => {
 	let routes = Router()
@@ -10,7 +9,9 @@ export default ({ config, db }) => {
 	const jwtStrategy = JwtStrategy({ config, db })
 	passport.use(jwtStrategy)
 	routes.use(passport.initialize())
-	routes.use(passport.authenticate("jwt", { session: false }))
+	routes.use(passport.authenticate("jwt", { 
+		session: false,
+	}))
 
 	return routes
 }

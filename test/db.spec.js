@@ -1,6 +1,7 @@
 import { describe, it, beforeEach } from 'mocha'
 import should from 'should'
 import IntegrationTest from './IntegrationTest';
+// import { try } from '../../../../AppData/Local/Microsoft/TypeScript/2.6/node_modules/@types/bluebird';
 
 const nationality = { code: 'US', name: 'United States' }
 const author = { name: 'TESTE', nationalityId: '' }
@@ -14,6 +15,12 @@ const book = {
   title: 'The Gunslinger',
   release: new Date(),
   isbn: '079876540123'
+}
+
+const book2 = {
+  title: 'It',
+  release: new Date(),
+  isbn: '222'
 }
 
 describe('DB Model', function () {
@@ -66,18 +73,17 @@ describe('DB Model', function () {
     })
   })
 
-  it('save => Votes', async () => {
-    const savedBook = await db.Book.create(book)
-    const savedVote = await db.Vote.create({ rating: 5 })
-    await savedVote.setBook(savedBook)
-    const votedBook = await  savedVote.getBook()
-    should.equal(votedBook.id, savedBook.id)
-  })
-
-  it.only('save => should not allow duplicate vote', async () => {
-    const savedBook = await db.Book.create(book)
-    const savedUser = await db.Book.create(user)
-    const savedVote = await db.Vote.create({rating: 5, userId: savedUser.id, bookId: savedBook.id})
+  it('save => should not allow duplicate vote', async () => {
+    const savedUser = await db.User.create(user)
+    const savedBook1 = await db.Book.create(book)
+    const savedBook2 = await db.Book.create(book2)
+    await db.Vote.create({ rating: 5, userId: savedUser.id, bookId: savedBook1.id })
+    await db.Vote.create({ rating: 4, userId: savedUser.id, bookId: savedBook2.id })
+    try {
+      await db.Vote.create({ rating: 3, userId: savedUser.id, bookId: savedBook1.id })
+    } catch(e) {
+      should.equal(e.name, 'SequelizeUniqueConstraintError')
+    }
   })
 
 })

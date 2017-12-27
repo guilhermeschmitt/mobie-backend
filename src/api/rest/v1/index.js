@@ -6,6 +6,7 @@ import middleware from '@/middleware'
 export default ({ config, db }) => {
   let api = Router()
 
+  // middleware
   api.use(middleware({ config, db }))
   api.use('/users', users({ config, db }))
   api.use('/books', books({ config, db }))

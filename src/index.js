@@ -21,10 +21,15 @@ const settings = {
 }
 
 initializeDb(settings, (db) => {
+
+  app.use((err, req, res, next) => {
+
+  })
+
   // auth
   app.use('/auth', auth({ config, db }))
 
-  // apiv1 router
+  // api
   app.use('/api/rest/v1', apiv1({ config, db }))
   app.use('/api/graphql/v1', graphql({ config, db }))
 

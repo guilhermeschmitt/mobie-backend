@@ -12,7 +12,9 @@ export default class extends Service {
   }
 
   async findById(id) {
-    return this.User.findById(id).then(user => user.get())
+    return this.User.findById(id).then(user => {
+      return user ? user.get() : null
+    })
   }
 
   async authenticate(username, password) {

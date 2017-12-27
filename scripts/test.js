@@ -1,12 +1,6 @@
-// Compile with babel
-require('babel-core/register')
-require("babel-polyfill")
+require('../config/env')
+const db = require('../config/db')
 
-const fs = require('fs')
-
-// ENV
-const dotenv = require('dotenv')
-dotenv.config()
 process.env.BABEL_ENV = 'test'
 process.env.NODE_ENV = 'test'
 
@@ -25,6 +19,7 @@ const mocha = new Mocha({
 })
 
 const getTestFiles = (dir, filelist = []) => {
+  let fs = require('fs')
   const files = fs.readdirSync(dir)
   files.forEach((file) => {
     const path = `${dir}/${file}`
@@ -33,24 +28,18 @@ const getTestFiles = (dir, filelist = []) => {
   return filelist
 }
 
-const argv = process.argv.slice(2)
-if (argv.length > 0) 
-  argv.forEach(path => mocha.addFile(path))
-else 
-  getTestFiles('./test').forEach(path => mocha.addFile(path))
+getTestFiles('./test').forEach(path => mocha.addFile(path))
 
 /** Database **/
-const mysql = require('mysql')
-const con = mysql.createConnection({ host: "localhost", user: process.env.DB_USER_TEST, password: process.env.DB_PASS_TEST })
-con.connect(() => {
-  const sql = `DROP SCHEMA IF EXISTS ${process.env.DB_SCHEMA_TEST}`
-  con.query(sql, () => {
-    con.query(`CREATE SCHEMA ${process.env.DB_SCHEMA_TEST}`, () => {
-      mocha.run((failures) => {
-        process.on('exit', () => process.exit(failures))
-        process.exit()
-      })
-    })
+db.clear({
+  host: 'localhost',
+  user: process.env.DB_PASS_TEST,
+  password: process.env.DB_PASS_TEST,
+  schema: process.env.DB_SCHEMA_TEST
+}, () => {
+  mocha.run((failures) => {
+    process.on('exit', () => process.exit(failures))
+    process.exit()
   })
 })
 
