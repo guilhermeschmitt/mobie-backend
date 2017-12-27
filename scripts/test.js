@@ -33,7 +33,7 @@ getTestFiles('./test').forEach(path => mocha.addFile(path))
 /** Database **/
 db.clear({
   host: 'localhost',
-  user: process.env.DB_PASS_TEST,
+  user: process.env.DB_USER_TEST,
   password: process.env.DB_PASS_TEST,
   schema: process.env.DB_SCHEMA_TEST
 }, () => {
