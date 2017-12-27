@@ -1,7 +1,7 @@
 # MOBIE-BACKEND
 ## Set up
 Tenha uma versão do MySQL instalada e rodando. Após isso, basta executar:
-```{r, engine='bash'}
+```bash
 npm install
 ```
 
@@ -25,8 +25,8 @@ DB_PASS_TEST=[a chave]
 
 ## Scripts
 O projeto possui os seguintes scripts:
-```{r, engine='bash'}
-npm start
-npm run test
-npm cleardb
+```bash
+npm start  # inicializa o servidor
+npm run test  # roda os testes 
+npm cleardb  # limpa a base de desenvolvimento
 ```
