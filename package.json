@@ -19,7 +19,8 @@
     "mysql": "^2.15.0",
     "nodemon": "^1.12.1",
     "should": "^13.0.1",
-    "sinon": "^3.3.0"
+    "sinon": "^3.3.0",
+    "sqlite3": "^3.1.13"
   },
   "dependencies": {
     "axios": "^0.16.2",

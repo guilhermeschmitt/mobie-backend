@@ -1,5 +1,5 @@
 require('../config/env')
-const db = require('../config/db')
+// const db = require('../config/db')
 
 process.env.BABEL_ENV = 'test'
 process.env.NODE_ENV = 'test'
@@ -30,16 +30,7 @@ const getTestFiles = (dir, filelist = []) => {
 
 getTestFiles('./test').forEach(path => mocha.addFile(path))
 
-/** Database **/
-db.clear({
-  host: 'localhost',
-  user: process.env.DB_USER_TEST,
-  password: process.env.DB_PASS_TEST,
-  schema: process.env.DB_SCHEMA_TEST
-}, () => {
-  mocha.run((failures) => {
-    process.on('exit', () => process.exit(failures))
-    process.exit()
-  })
+mocha.run((failures) => {
+  process.on('exit', () => process.exit(failures))
+  process.exit()
 })
-

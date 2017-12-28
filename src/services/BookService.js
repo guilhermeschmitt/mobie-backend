@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import Service from '@/services/Service'
-const ER_BAD_FIELD_ERROR = 'ER_BAD_FIELD_ERROR'
 
 export default class extends Service {
   constructor(db) {
@@ -16,7 +15,7 @@ export default class extends Service {
     return this.Book.findById(id)
   }
 
-  async searchBook(attr, { limit = 50, offset = 0, simple = true } = {}) {
+  async searchBook(attr, { limit = 50, offset = 0, simple = false } = {}) {
     const compacted = _.pickBy(attr)
     Object.keys(compacted).forEach(el => compacted[el] = { $like: `%${compacted[el]}%` })
     return this.Book.findAll({
@@ -25,9 +24,11 @@ export default class extends Service {
       order: ['title'],
       limit,
       offset
-    }).catch(error => {
-      if (error.original.code === ER_BAD_FIELD_ERROR)
+    }).catch(err => {
+      if (err.name === 'SequelizeDatabaseError')
         return []
+      else  
+        throw err
     })
   }
 

@@ -14,17 +14,13 @@ app.use(morgan('dev'))
 app.use(cors({ exposedHeaders: config.corsHeaders }))
 app.use(bodyParser.json({ limit: config.bodyLimit }))
 
-const settings = {
-  schema: process.env.DB_SCHEMA,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASS
-}
-
-initializeDb(settings, (db) => {
+initializeDb({ connection: process.env.DB_CONNECTION }, (db) => {
 
   app.use((err, req, res, next) => {
 
   })
+
+  app.get((req, res) => res.sendStatus(200))
 
   // auth
   app.use('/auth', auth({ config, db }))
