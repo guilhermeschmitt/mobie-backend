@@ -77,7 +77,7 @@
       "node": true
     },
     "rules": {
-      "no-console": 1,
+      "no-console": 2,
       "semi": [
         1,
         "never"

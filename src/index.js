@@ -17,9 +17,10 @@ app.use(bodyParser.json({ limit: config.bodyLimit }))
 initializeDb({ connection: process.env.DB_CONNECTION }, (db) => {
 
   app.get((req, res) => res.sendStatus(200))
+  console.log('teste')
 
   // auth
-  app.use('/auth', auth({ config, db }));
+  app.use('/auth', auth({ config, db }))
 
   // api
   app.use('/api/rest/v1', apiv1({ config, db }))
