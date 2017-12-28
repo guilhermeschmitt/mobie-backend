@@ -1,5 +1,4 @@
 require('../config/env')
-// const db = require('../config/db')
 
 process.env.BABEL_ENV = 'test'
 process.env.NODE_ENV = 'test'
@@ -11,13 +10,6 @@ process.on('unhandledRejection', err => {
   throw err
 })
 
-// Run mocha tests
-const Mocha = require('mocha')
-const mocha = new Mocha({
-  ignoreLeaks: true,
-  recursive: true
-})
-
 const getTestFiles = (dir, filelist = []) => {
   let fs = require('fs')
   const files = fs.readdirSync(dir)
@@ -27,6 +19,13 @@ const getTestFiles = (dir, filelist = []) => {
   })
   return filelist
 }
+
+// Run mocha tests
+const Mocha = require('mocha')
+const mocha = new Mocha({
+  ignoreLeaks: true,
+  recursive: true
+})
 
 getTestFiles('./test').forEach(path => mocha.addFile(path))
 
