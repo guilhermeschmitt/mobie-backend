@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize'
 import schemaModel from '@/models'
 
-export default ({ connection }, callback) => {
+export default ({ connection = 'sqlite://:memory' }, callback) => {
   const Op = Sequelize.Op
   const sequelize = new Sequelize(connection, {
     // dialect,
