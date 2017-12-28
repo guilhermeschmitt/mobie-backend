@@ -18,7 +18,7 @@ var root = {
   },
 }
 
-export default ({ config, db }) => {
+export default () => {
   let api = Router()
     api.get('/ping', (req, res) => {
       res.json(req.query)

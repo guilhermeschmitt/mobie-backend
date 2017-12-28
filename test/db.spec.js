@@ -1,7 +1,6 @@
 import { describe, it, beforeEach } from 'mocha'
 import should from 'should'
-import IntegrationTest from './IntegrationTest';
-// import { try } from '../../../../AppData/Local/Microsoft/TypeScript/2.6/node_modules/@types/bluebird';
+import IntegrationTest from './IntegrationTest'
 
 const nationality = { code: 'US', name: 'United States' }
 const author = { name: 'TESTE', nationalityId: '' }

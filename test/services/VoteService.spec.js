@@ -16,7 +16,7 @@ describe('@/services/VoteService', function () {
     IntegrationTest(this, (db) => {
       userService = new UserService(db)
       bookService = new BookService(db)
-      voteService = new VoteService(db)
+      voteService = new VoteService(db);
       user = {
         username: 'dexter',
         email: 'dexter@gmail.com',

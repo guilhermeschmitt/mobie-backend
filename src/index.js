@@ -16,18 +16,14 @@ app.use(bodyParser.json({ limit: config.bodyLimit }))
 
 initializeDb({ connection: process.env.DB_CONNECTION }, (db) => {
 
-  app.use((err, req, res, next) => {
-
-  })
-
   app.get((req, res) => res.sendStatus(200))
 
   // auth
-  app.use('/auth', auth({ config, db }))
+  app.use('/auth', auth({ config, db }));
 
   // api
   app.use('/api/rest/v1', apiv1({ config, db }))
   app.use('/api/graphql/v1', graphql({ config, db }))
 
-  app.listen(process.env.PORT, () => console.log(`http://localhost:${process.env.PORT}/ `))
+  app.listen(process.env.PORT, () => {})
 })
