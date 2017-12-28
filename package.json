@@ -64,7 +64,7 @@
       ]
     ]
   },
-  "eslintIgnore": ["config/*.js", "scripts/*.js"],
+  "eslintIgnore": ["config/*.js", "scripts/*.js", "node_modules"],
   "eslintConfig": {
     "extends": "eslint:recommended",
     "parserOptions": {
