@@ -64,6 +64,7 @@
       ]
     ]
   },
+  "eslintIgnore": ["config/*.js", "scripts/*.js"],
   "eslintConfig": {
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -77,7 +78,7 @@
       "node": true
     },
     "rules": {
-      "no-console": 2,
+      "no-console": 1,
       "semi": [
         1,
         "never"
