@@ -46,7 +46,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "test": "node scripts/test.js",
-    "lint": "eslint ./src ./test --ext .js",
+    "eslint": "eslint ./src ./test --ext .js",
     "cleardb": "node scripts/cleardb.js"
   },
   "babel": {
