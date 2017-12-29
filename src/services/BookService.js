@@ -13,7 +13,7 @@ export class BookService extends Service {
   }
 
   async findById(id) {
-    return this.bookRepo.findOneById(id)
+    return this.bookRepo.findOneById(id,  { relations: ["authors", "genre"] })
   }
 
   async searchBook(attr, { limit = 50, offset = 0, simple = false } = {}) {
