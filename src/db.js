@@ -1,17 +1,9 @@
-import Sequelize from 'sequelize'
-import schemaModel from '@/models'
+import { createConnection } from "typeorm"
 
-export default ({ connection = 'sqlite://:memory' }, callback) => {
-  const Op = Sequelize.Op
-  const sequelize = new Sequelize(connection, {
-    // dialect,
-    omitNull: true,
-    operatorsAliases: { $and: Op.and, $like: Op.like },
-    logging: false,
-    typeValidation: true
+export default async (args) => {
+  return createConnection(args)
+  .catch(error => {
+    console.log("Error: ", error)
   })
-
-  schemaModel(sequelize)
-  sequelize.sync().then(() => callback(sequelize))
 }
 
