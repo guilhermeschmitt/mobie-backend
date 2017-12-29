@@ -12,7 +12,7 @@ export class UserService extends Service {
   }
 
   async findById(id) {
-    return this.userRepo.findOneById(id)
+    return this.userRepo.findOneById(id, { relations: ["authors", "genre"] })
   }
 
   async authenticate(username, password) {

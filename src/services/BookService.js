@@ -1,18 +1,19 @@
 import _ from 'lodash'
-import Service from '@/services/Service'
+import Service from './Service'
+import { Book } from '../models'
 
-export default class extends Service {
+export class BookService extends Service {
   constructor(db) {
     super(db)
-    this.Book = this.db.Book
+    this.bookRepo = this.db.getRepository(Book)
   }
 
   async save(book) {
-    return this.Book.create(book)
+    return this.bookRepo.save(book)
   }
 
-  async findById(id = -1) {
-    return this.Book.findById(id)
+  async findById(id) {
+    return this.bookRepo.findOneById(id)
   }
 
   async searchBook(attr, { limit = 50, offset = 0, simple = false } = {}) {
