@@ -29,11 +29,6 @@ const mocha = new Mocha({
 
 getTestFiles('./test').forEach(path => mocha.addFile(path))
 
-var fs = require('fs');
-var filePath = `${process.cwd()}/mobie.db`; 
-if(fs.existsSync(filePath))
-  fs.unlinkSync(filePath);
-
 mocha.run((failures) => {
   process.on('exit', () => process.exit(failures))
   process.exit()

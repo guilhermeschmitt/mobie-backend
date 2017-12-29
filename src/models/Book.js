@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, JoinTable, JoinColumn, BaseEnti
 import { Author, Genre } from './'
 
 @Entity()
-export class Book extends BaseEntity {
+export class Book {
 
   @PrimaryGeneratedColumn()
   id = undefined

@@ -1,7 +1,11 @@
 import initializeDb from '../src/db'
 import ormconfig from '../ormconfig.json'
 
-export default async (mocha) => {
-  mocha.timeout(10000)
+export const createDb =  async (mocha) => {
+  var fs = require('fs')
+  var filePath = `${process.cwd()}/mobie.db`
+  if(fs.existsSync(filePath))
+    fs.unlinkSync(filePath)
+  
   return initializeDb(ormconfig[1])
 }

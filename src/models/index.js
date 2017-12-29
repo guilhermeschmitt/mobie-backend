@@ -1,3 +1,5 @@
 export { Author } from './Author'
 export { Book } from './Book'
 export { Genre } from './Genre'
+export { User } from './User'
+export { Vote } from './Vote'

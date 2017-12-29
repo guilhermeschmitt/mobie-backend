@@ -8,6 +8,7 @@
     "password": "masterkey",
     "database": "mobie",
     "synchronize": true,
+
     "entities": [
       "src/models/*.js"
     ],
