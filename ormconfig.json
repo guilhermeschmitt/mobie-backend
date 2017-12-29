@@ -20,7 +20,7 @@
   },
 
   {
-    "name": "test-database",
+    "name": "test-databases",
     "type": "sqlite",
     "database": "mobie.db",
     "synchronize": true,
