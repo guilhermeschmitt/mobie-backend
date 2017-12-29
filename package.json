@@ -39,10 +39,12 @@
     "mysql2": "^1.4.2",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
+    "reflect-metadata": "^0.1.10",
     "request": "^2.82.0",
     "sequelize": "^4.13.6",
     "sequelize-cli": "^3.0.0",
-    "tingodb": "^0.5.1"
+    "tingodb": "^0.5.1",
+    "typeorm": "^0.1.9"
   },
   "scripts": {
     "start": "node scripts/start.js",
