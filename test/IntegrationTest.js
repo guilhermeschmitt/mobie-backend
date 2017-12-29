@@ -1,5 +1,4 @@
 import initializeDb from '../src/db'
-import { start } from '../src/index'
 import ormconfig from '../ormconfig.json'
 
 export const createDb = async () => {
