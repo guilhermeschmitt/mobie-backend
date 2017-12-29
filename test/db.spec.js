@@ -32,7 +32,6 @@ describe('DB Model', function () {
     const foundBook = await conn.getRepository(Book).findOneById(savedBook.id, { relations: ["authors", "genre"] })
     should.equal(foundBook.title, book.title)
     should.equal(foundBook.isbn, book.isbn)
-    // should.equal(foundBook.releaseDate.toISOString(), book.releaseDate.toISOString())
     should.equal(foundBook.genre.name, genre.name)
     should.equal(foundBook.authors[0].name, author.name)
   })
@@ -49,8 +48,10 @@ describe('DB Model', function () {
 
     const vote = { rating: 5, user: savedUser, book: savedBook }
     const savedVote = await conn.getRepository(Vote).save(vote)
-    const foundVote = await conn.getRepository(Vote).findOneById(savedVote.id, { relations: ["book"] })
+    const foundVote = await conn.getRepository(Vote).findOneById(savedVote.id, { relations: ["book", "user"] })
     should.equal(foundVote.userId, savedUser.id)
     should.equal(foundVote.rating, vote.rating)
+    should.equal(foundVote.user.username, savedUser.username)
+    should.deepEqual(foundVote.book, savedBook)
   })
 })

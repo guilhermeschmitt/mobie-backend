@@ -3,17 +3,32 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
 import config from './config.json'
-import createDb from './db'
+import initializeDb from './db'
+import apiv1 from './api/rest/v1'
+import auth from './api/rest/v1/auth'
 
-/* Server config */
-let app = express()
-app.use(morgan('dev'))
-app.use(cors({ exposedHeaders: config.corsHeaders }))
-app.use(bodyParser.json({ limit: config.bodyLimit }))
+export const start = (args) => {
+  
+  /* Server config */
+  let app = express()
+  app.use(morgan('dev'))
+  app.use(cors({ exposedHeaders: config.corsHeaders }))
+  app.use(bodyParser.json({ limit: config.bodyLimit }))
 
-createDb((db) => {
   // ping
-  app.get('/', (req, res) => {})
+  app.get('/', (req, res) => {
+    res.sendStatus(200)
+  })
 
-  app.listen(process.env.PORT, () => { })
-})
+  return initializeDb(args).then((db) => {
+    app.use('/auth', auth({ config, db }))
+    app.use('/api/rest/v1', apiv1({ config, db }))
+
+    app.listen(process.env.PORT || 8081, () => { })
+
+    return { server: app, db }
+  })
+}
+
+start()
+
