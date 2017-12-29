@@ -1,22 +1,33 @@
 import { describe, it, beforeEach } from 'mocha'
 import should from 'should'
 import IntegrationTest from './IntegrationTest'
-import { Author } from '../src/entity/Author';
+import { Author } from '../src/models/Author'
+import { Book } from '../src/models/Book'
 
-describe.only('DB Model', function () {
-  let repo = undefined
+describe('DB Model', function () {
+  let conn = undefined
 
   beforeEach(async () => {
-    const conn = await IntegrationTest(this)
-    repo = conn.getRepository(Author)
+    conn = await IntegrationTest(this)
   })
 
-  it.only('save => Author',  async () => {
+  it('author_book => relationship', async () => {
     const author = new Author()
     author.name = 'author'
-    
-    const saved = await repo.save(author)
-    const found = await repo.findOneById(saved.id)
-    should.equal(found.id, saved.id)
+    await conn.getRepository(Author).save(author)
+
+    const book = new Book()
+    book.title = "It"
+    book.isbn = "111"
+    book.authors = [author]
+    book.releaseDate = new Date()
+
+    const savedBook = await conn.getRepository(Book).save(book)
+
+    const foundBook = await conn.getRepository(Book).findOneById(savedBook.id, { relations: ["authors"] })
+    should.equal(foundBook.title, book.title)
+    should.equal(foundBook.isbn, book.isbn)
+    should.equal(foundBook.releaseDate.toString(), book.releaseDate.toString())
+    should.equal(foundBook.authors[0].name, author.name)
   })
 })

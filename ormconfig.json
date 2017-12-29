@@ -9,7 +9,7 @@
     "database": "mobie",
     "synchronize": true,
     "entities": [
-      "src/entity/*.js"
+      "src/models/*.js"
     ],
     "subscribers": [
       "dist/subscriber/*.js"
@@ -25,7 +25,7 @@
     "database": "mobie.db",
     "synchronize": true,
     "entities": [
-      "src/entity/*.js"
+      "src/models/*.js"
     ]
   }
 ]
