@@ -4,8 +4,8 @@ import cors from 'cors'
 import express from 'express'
 import config from './config.json'
 import initializeDb from './db'
-import apiv1 from './api/rest/v1'
-import auth from './api/rest/v1/auth'
+import apiv1 from './api'
+import auth from './api/auth'
 
 export const start = (args) => {
   

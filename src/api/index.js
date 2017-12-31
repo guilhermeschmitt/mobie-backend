@@ -1,7 +1,7 @@
 import { Router } from 'express'
 // import users from './users'
 // import books from './books'
-import middleware from '../../../middleware'
+import middleware from '../middleware'
 
 export default ({ config, db }) => {
   let api = Router()
