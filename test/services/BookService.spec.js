@@ -106,4 +106,9 @@ describe('BookService', function () {
     should.equal(found.title, 'The Gunslinger')
     should.equal(found.isbn, '111')
   })
+
+  it.only('find => should ignore undefined arguments', async () => {
+    const a = await bookService.teste()
+    console.log(a)
+  })
 })
