@@ -25,6 +25,7 @@
     "type": "sqlite",
     "database": "mobie.db",
     "synchronize": true,
+    "logging": false,
     "entities": [
       "src/models/*.js"
     ]

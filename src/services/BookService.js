@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import Service from './Service'
 import { Book } from '../models'
 
@@ -13,24 +12,18 @@ export class BookService extends Service {
   }
 
   async findById(id) {
-    return this.bookRepo.findOneById(id,  { relations: ["authors", "genre"] })
+    return this.bookRepo.findOneById(id, { relations: ["authors", "genre"] })
   }
 
-  async searchBook(attr, { limit = 50, offset = 0, simple = false } = {}) {
-    const compacted = _.pickBy(attr)
-    Object.keys(compacted).forEach(el => compacted[el] = { $like: `%${compacted[el]}%` })
-    return this.Book.findAll({
-      where: { $and: compacted },
-      include: simple ? undefined : [{ model: this.db.Author }],
-      order: ['title'],
-      limit,
-      offset
-    }).catch(err => {
-      if (err.name === 'SequelizeDatabaseError')
-        return []
-      else  
-        throw err
-    })
+  async searchBook(attr, { limit = 50, offset = 0 } = {}) {
+    const query = Object.getOwnPropertyNames(attr).length > 0 ? "LOWER(book.title) LIKE LOWER(:title) OR book.isbn LIKE :isbn" : ''
+    return this.bookRepo.createQueryBuilder("book")
+      .where(query)
+      .take(limit)
+      .skip(offset)
+      .orderBy("book.title", "ASC")
+      .setParameters({ title: `%${attr.title}%`, isbn: `%${attr.isbn}%` })
+      .getMany()
   }
 
 }
