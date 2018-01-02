@@ -3,7 +3,7 @@ import should from 'should'
 import { createDb } from '../IntegrationTest'
 import { BookService } from '../../src/services/BookService'
 
-describe.only('BookService', function () {
+describe('BookService', function () {
   let conn = undefined
   let bookService = undefined
 
