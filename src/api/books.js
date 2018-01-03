@@ -1,15 +1,15 @@
 import { Router } from 'express'
-import BookService from '@/services/BookService'
+import {BookService} from '../services/BookService'
 
 export default ({ db }) => {
   const books = Router()
-  const service = new BookService(db)
+  const service = new BookService()
 
-  books.get('/search', async (req, res) => {
-    const { title, isbn } = req.query
+  books.get('/', async (req, res) => {
+    const { query } = req.query
     const limit = parseInt(req.query.limit, 10) || undefined
     const offset = parseInt(req.query.offset, 10) || undefined
-    return res.json(await service.searchBook({ title, isbn }, { limit, offset })) 
+    return res.json(await service.searchBook(query, { limit, offset })) 
   })
 
   books.get('/:id', (req, res) => {
