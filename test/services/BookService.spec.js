@@ -39,6 +39,7 @@ describe('BookService', function () {
     result.should.have.property('totalItems').which.is.a.Number()
 
     const item = result.items[0]
+    console.log(item)
     should.equal(item.subtitle, 'The Gunslinger')
   })
 

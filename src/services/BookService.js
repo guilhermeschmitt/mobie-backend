@@ -40,12 +40,4 @@ export class BookService extends Service {
       items: parsed.items.map(el => this.convertToBook(el))
     }
   }
-
-  async teste() {
-    return request('https://www.googleapis.com/books/v1/volumes?q=the%20gunslinger')
-      .then(function (a) {
-        return a
-      })
-  }
-
 }
