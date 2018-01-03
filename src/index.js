@@ -22,10 +22,8 @@ export const start = (args) => {
 
   return initializeDb(args).then((db) => {
     app.use('/auth', auth({ config, db }))
-    app.use('/api/rest/v1', apiv1({ config, db }))
-
+    app.use('/api/v1', apiv1({ config, db }))
     app.listen(process.env.PORT || 8081, () => { })
-
     return { server: app, db }
   })
 }

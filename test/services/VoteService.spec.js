@@ -4,7 +4,7 @@ import { createDb } from '../IntegrationTest'
 import { VoteService } from '../../src/services/VoteService'
 import { User } from '../../src/models'
 
-describe('UserService', function () {
+describe('VoteService', function () {
   let conn = undefined
   let voteService = undefined
 
@@ -17,7 +17,7 @@ describe('UserService', function () {
     await conn.close()
   })
 
-  it('user => should save', async () => {
+  it('vote => should save', async () => {
     const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
     const savedUser = await conn.getRepository(User).save(user)
 
@@ -28,7 +28,7 @@ describe('UserService', function () {
     should.equal(savedVote.userId, savedUser.id)
   })
 
-  it('user => should find', async () => {
+  it('vote => should find', async () => {
     const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
     const savedUser = await conn.getRepository(User).save(user)
     const vote = { rating: 5 }
@@ -39,7 +39,7 @@ describe('UserService', function () {
     should.equal(foundVote.book.title, 'The Dark Tower I (MTI)')
   })
 
-  it('user => should list', async () => {
+  it('vote => should list', async () => {
     const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
     const savedUser = await conn.getRepository(User).save(user)
 
