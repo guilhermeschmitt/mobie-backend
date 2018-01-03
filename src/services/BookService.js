@@ -1,7 +1,6 @@
 import Service from './Service'
 import qs from 'query-string'
-import r from 'request-promise'
-const request = r.defaults({ 'proxy': 'http://192.168.0.254:3128' })
+import request from 'request-promise'
 
 export class BookService extends Service {
 
