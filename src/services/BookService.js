@@ -1,15 +1,11 @@
 import Service from './Service'
 import qs from 'query-string'
-import request from 'request-promise'
-import { Book } from '../models'
+import r from 'request-promise'
+const request = r.defaults({ 'proxy': 'http://192.168.0.254:3128' })
 
 export class BookService extends Service {
-  constructor(db) {
-    super(db)
-    this.bookRepo = this.db.getRepository(Book)
-  }
 
-  convertToBook(parsed) {
+  _convertToBook(parsed) {
     return {
       id: parsed.id,
       title: parsed.volumeInfo.title,
@@ -26,18 +22,18 @@ export class BookService extends Service {
   }
 
   async findById(id) {
-    const json = await request.get(`https://www.googleapis.com/books/v1/volumes/${id}`)
+    const json = await request.get(`${process.env.BOOKS_API_URI}/${id}`)
     const parsed = JSON.parse(json)
-    return this.convertToBook(parsed)
+    return this._convertToBook(parsed)
   }
 
   async searchBook(query, { limit = 20, offset = 0 } = {}) {
     const args = { q: query, startIndex: offset, maxResults: limit, printType: 'books', projection: 'lite' }
-    const json = await request.get(`https://www.googleapis.com/books/v1/volumes?${qs.stringify(args)}`)
+    const json = await request.get(`${process.env.BOOKS_API_URI}?${qs.stringify(args)}`)
     const parsed = JSON.parse(json)
     return {
       totalItems: parsed.totalItems,
-      items: parsed.items.map(el => this.convertToBook(el))
+      items: parsed.items.map(el => this._convertToBook(el))
     }
   }
 }

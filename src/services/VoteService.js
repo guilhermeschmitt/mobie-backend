@@ -1,38 +1,28 @@
-import Service from '@/services/Service'
+import Service from './Service'
+import { Vote } from '../models'
+import {BookService} from './BookService'
 
-export default class extends Service {
+export class VoteService extends Service {
 
   constructor(db) {
     super(db)
-    this.User = this.db.User
-    this.Vote = this.db.Vote
-
-    this.responseModel = {
-      include: [{
-        model: this.db.Book,
-        attributes: { exclude: ['createdAt', 'updatedAt'] }
-      }],
-      attributes: {
-        exclude: ['bookId']
-      }
-    }
+   this.voteRepo = this.db.getRepository(Vote)
+   this.bookService = new BookService(db)
   }
 
-  async list(id) {
-    const user = await this.User.findById(id)
-    const votes = await user.getVotes({...this.responseModel})
-    return votes.map(vote => vote.get())
+  async list(userId) {
+    return this.voteRepo.find({userId})
   }
 
   async find(userId, bookId) {
-    return this.Vote.findOne({ where: { userId, bookId }, ...this.responseModel })
-      .then(vote => {
-        return vote ? vote.get() : null
-      })
+    const vote = await this.voteRepo.findOne({userId, bookId})
+    vote.book = await this.bookService.findById(vote.bookId)
+    return vote
   }
 
   async save(userId, bookId, vote) {
-    const saved = await this.Vote.findOrCreate({ where: { userId, bookId } })
-    return saved[0].update(vote)
+    vote.userId = userId
+    vote.bookId = bookId
+    return this.voteRepo.save(vote)
   }
 }
