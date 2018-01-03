@@ -32,7 +32,7 @@ export class BookService extends Service {
   }
 
   async searchBook(query, { limit = 20, offset = 0 } = {}) {
-    const args = { q: query, startIndex: offset, maxResults: limit, printType: 'books' }
+    const args = { q: query, startIndex: offset, maxResults: limit, printType: 'books', projection: 'lite' }
     const json = await request.get(`https://www.googleapis.com/books/v1/volumes?${qs.stringify(args)}`)
     const parsed = JSON.parse(json)
     return {

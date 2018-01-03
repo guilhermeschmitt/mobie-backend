@@ -39,7 +39,7 @@ describe('BookService', function () {
     result.should.have.property('totalItems').which.is.a.Number()
 
     const item = result.items[0]
-    should.equal(item.id, 'xeIoDwAAQBAJ')
+    should.equal(item.subtitle, 'The Gunslinger')
   })
 
   it('find => search by title partial', async () => {
@@ -47,7 +47,7 @@ describe('BookService', function () {
     result.should.have.property('totalItems').which.is.a.Number()
     
     const item = result.items[0]
-    should.equal(item.id, 'yl4dILkcqm4C')
+    should.equal(item.title, 'The Lord of the Rings')
   })
 
   it('find => should limit specified', async () => {
@@ -57,6 +57,6 @@ describe('BookService', function () {
 
   it('find => should consider the offset', async () => {
     const result = await bookService.searchBook('the gunslinger', { offset: 1 })
-    should.equal(result.items[0].id, 'wOkqDwAAQBAJ')
+    should.equal(result.items[0].subtitle, 'The Gunslinger')
   })
 })
