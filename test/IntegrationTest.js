@@ -1,5 +1,5 @@
 import initializeDb from '../src/db'
-import ormconfig from '../ormconfig.json'
+import ormconfig from './ormconfig-test.json'
 
 export const createDb = async () => {
   var fs = require('fs')
@@ -7,5 +7,5 @@ export const createDb = async () => {
   if (fs.existsSync(filePath))
     fs.unlinkSync(filePath)
 
-  return initializeDb(ormconfig[1])
+  return initializeDb(ormconfig)
 }
