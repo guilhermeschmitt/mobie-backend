@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import UserService from '@/services/UserService'
-import VoteService from '@/services/VoteService'
+import { UserService } from '../services/UserService'
+import { VoteService } from '../services/VoteService'
 
 export default ({ db }) => {
   let users = Router()

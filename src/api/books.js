@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import {BookService} from '../services/BookService'
 
-export default ({ db }) => {
+export default () => {
   const books = Router()
   const service = new BookService()
 
