@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import jwt from 'jwt-simple'
-import UserService from '@/services/UserService'
+import { UserService } from '../services/UserService'
 
 export default ({ db }) => {
   let auth = Router()

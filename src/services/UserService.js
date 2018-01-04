@@ -1,23 +1,21 @@
-import Service from '@/services/Service'
+import Service from './Service'
+import { User } from '../models'
 
-export default class extends Service {
+export class UserService extends Service {
   constructor(db) {
     super(db)
-    this.User = this.db.User
-    this.Vote = this.db.Vote
+    this.userRepo = this.db.getRepository(User)
   }
 
-  async save(User) {
-    return this.User.create(User).then(user => user.get())
+  async save(user) {
+    return this.userRepo.save(user)
   }
 
   async findById(id) {
-    return this.User.findById(id).then(user => {
-      return user ? user.get() : null
-    })
+    return this.userRepo.findOneById(id)
   }
 
   async authenticate(username, password) {
-    return this.User.findOne({ where: { username, password } })
+    return this.userRepo.findOne({ username, password })
   }
 }

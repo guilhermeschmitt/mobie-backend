@@ -1,85 +1,55 @@
-import { describe, it, beforeEach } from 'mocha'
+import { describe, it, beforeEach, afterEach } from 'mocha'
 import should from 'should'
-import VoteService from '@/services/VoteService'
-import UserService from '@/services/UserService'
-import BookService from '@/services/BookService'
-import IntegrationTest from '../IntegrationTest'
+import { createDb } from '../IntegrationTest'
+import { VoteService } from '../../src/services/VoteService'
+import { User } from '../../src/models'
 
-describe('@/services/VoteService', function () {
-  let userService
-  let bookService
-  let voteService
-  let user
-  let book1 = { title: 'The Gunslinger', release: new Date(), isbn: '111' }
+describe('VoteService', function () {
+  let conn = undefined
+  let voteService = undefined
 
-  beforeEach((done) => {
-    IntegrationTest(this, (db) => {
-      userService = new UserService(db)
-      bookService = new BookService(db)
-      voteService = new VoteService(db)
-      user = {
-        username: 'dexter',
-        email: 'dexter@gmail.com',
-        socialId: 'AsjLKJnklsadfn'
-      }
-      done()
-    })
+  beforeEach(async () => {
+    conn = await createDb(this)
+    voteService = new VoteService(conn)
   })
 
-  it('vote => should vote a new book', async () => {
-    const savedBook = await bookService.save(book1)
-    const saved = await userService.save(user)
-    await voteService.save(saved.id, savedBook.id, { rating: 5 })
-    const votes = await voteService.list(saved.id)
-    should.equal(votes.length, 1)
-    should.equal(votes[0].rating, 5)
+  afterEach(async () => {
+    await conn.close()
   })
 
-  it('vote => should update a voting book', async () => {
-    const savedBook = await bookService.save(book1)
-    const saved = await userService.save(user)
-    await voteService.save(saved.id, savedBook.id, { rating: 5 })
-    await voteService.save(saved.id, savedBook.id, { rating: 3 })
-    const votes = await voteService.list(saved.id)
-    should.equal(votes.length, 1)
-    should.equal(votes[0].rating, 3)
-  })
+  it('vote => should save', async () => {
+    const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
+    const savedUser = await conn.getRepository(User).save(user)
 
-  it('vote => should not allow rating bigger than 5', async () => {
-    const savedBook = await bookService.save(book1)
-    const saved = await userService.save(user)
-    return voteService.save(saved.id, savedBook.id, { rating: 6 }).catch(err => {
-      should.equal(err.name, 'SequelizeValidationError')
-    })
-  })
+    const vote = { rating: 5 }
+    const savedVote = await voteService.save(savedUser.id, 'xeIoDwAAQBAJ', vote)
 
-  it('vote => should not allow rating less than 0', async () => {
-    const savedBook = await bookService.save(book1)
-    const saved = await userService.save(user)
-    return voteService.save(saved.id, savedBook.id, { rating: -1 }).catch(err => {
-      should.equal(err.name, 'SequelizeValidationError')
-    })
-  })
-
-  it('vote => should get user votes', async () => {
-    const savedBook = await bookService.save(book1)
-    const saved = await userService.save(user)
-    await voteService.save(saved.id, savedBook.id, { rating: 5 })
-
-    const votes = await voteService.list(saved.id)
-    should.equal(votes.length, 1)
-    should.equal(votes[0].book.id, savedBook.id)
-  })
-
-  it('vote => should find vote by user and book', async () => {
-    const savedBook = await bookService.save(book1)
-    const savedUser = await userService.save(user)
-    const vote = await voteService.save(savedUser.id, savedBook.id, { rating: 5 })
-
-    const savedVote = await voteService.find(savedUser.id, savedBook.id)
+    should.equal(savedVote.bookId, 'xeIoDwAAQBAJ')
     should.equal(savedVote.userId, savedUser.id)
-    should.equal(savedVote.userId, savedUser.id)
-    should.equal(savedVote.rating, vote.rating)
   })
 
+  it('vote => should find', async () => {
+    const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
+    const savedUser = await conn.getRepository(User).save(user)
+    const vote = { rating: 5 }
+    await voteService.save(savedUser.id, 'xeIoDwAAQBAJ', vote)
+    const foundVote = await voteService.find(savedUser.id, 'xeIoDwAAQBAJ')
+    should.equal(foundVote.bookId, 'xeIoDwAAQBAJ')
+    should.equal(foundVote.userId, savedUser.id)
+    should.equal(foundVote.book.title, 'The Dark Tower I (MTI)')
+  })
+
+  it('vote => should list', async () => {
+    const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
+    const savedUser = await conn.getRepository(User).save(user)
+
+    await voteService.save(savedUser.id, 'xeIoDwAAQBAJ', { rating: 5 })
+    await voteService.save(savedUser.id, 'xeIoDwAAQBAP', { rating: 3 })
+    await voteService.save(savedUser.id, 'xeIoDwAAQBAQ', { rating: 3 })
+
+    const votes = await voteService.list(savedUser.id)
+    should.equal(votes[0].bookId, 'xeIoDwAAQBAJ')
+    should.equal(votes[1].bookId, 'xeIoDwAAQBAP')
+    should.equal(votes[2].bookId, 'xeIoDwAAQBAQ')
+  })
 })

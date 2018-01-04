@@ -1,53 +1,45 @@
-import { describe, it, beforeEach } from 'mocha'
+import { describe, it, beforeEach, afterEach } from 'mocha'
 import should from 'should'
-import UserService from '@/services/UserService'
-import IntegrationTest from '../IntegrationTest'
+import { createDb } from '../IntegrationTest'
+import { UserService } from '../../src/services/UserService'
 
 describe('UserService', function () {
-  let service
-  let user
+  let conn = undefined
+  let userService = undefined
+  const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
 
-  beforeEach((done) => {
-    IntegrationTest(this, (db) => {
-      service = new UserService(db)
-      user = {
-        username: 'dexter',
-        email: 'dexter@gmail.com',
-        socialId: 'AsjLKJnklsadfn'
-      }
-      done()
-    })
+  beforeEach(async () => {
+    conn = await createDb(this)
+    userService = new UserService(conn)
   })
 
-  it('save => User', async () => {
-    const saved = await service.save(user)
-    saved.should.have.property('id').which.is.a.Number()
-    should.equal(saved.username, 'dexter')
-    should.equal(saved.email, 'dexter@gmail.com')
-    should.equal(saved.socialId, 'AsjLKJnklsadfn')
+  afterEach(async () => {
+    await conn.close()
   })
 
-  it('save => should not allow wrong email', async () => {
-    user.email = 'testom'
-    service.save(user).catch(error => {
-      should.equal(error.name, 'SequelizeValidationError')
-    })
+  it('user => should save', async () => {
+    const savedUser = await userService.save(user)
+    should.exists(savedUser.id)
   })
 
-  it('save => should not allow same email', async () => {
-    service.save(user).then(() => {
-      service.save(user).catch(error => {
-        should.equal(error.name, 'SequelizeUniqueConstraintError')
-      })
-    })
+  it('user => should find', async () => {
+    const savedUser = await userService.save(user)
+    const foundUser = await userService.findById(savedUser.id)
+    should.equal(foundUser.name, savedUser.name)
   })
 
-  it('find => should find user by id', async () => {
-    const saved = await service.save(user)
-    const found = await service.findById(saved.id)
-    found.should.have.property('id').which.is.a.Number()
-    should.equal(found.username, 'dexter')
-    should.equal(found.email, 'dexter@gmail.com')
-    should.equal(found.socialId, 'AsjLKJnklsadfn')
+  it('user => should authenticate success', async () => {
+    const savedUser = await userService.save(user)
+    const foundUser = await userService.authenticate(user.username, user.password)
+    should.equal(foundUser.name, savedUser.name)
+  })
+
+  it('user => should authenticate fail', async () => {
+    await userService.save(user)
+
+    const foundUser1 = await userService.authenticate(user.username, "wrong")
+    const foundUser2 = await userService.authenticate("wrong", user.password)
+    should.equal(foundUser1, null)
+    should.equal(foundUser2, null)
   })
 })

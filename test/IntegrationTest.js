@@ -1,6 +1,11 @@
 import initializeDb from '../src/db'
+import ormconfig from './ormconfig-test.json'
 
-export default (mocha, callback) => {
-  mocha.timeout(10000)
-  initializeDb({}, (sequelize) => callback(sequelize))
+export const createDb = async () => {
+  var fs = require('fs')
+  var filePath = `${process.cwd()}/mobie.db`
+  if (fs.existsSync(filePath))
+    fs.unlinkSync(filePath)
+
+  return initializeDb(ormconfig)
 }

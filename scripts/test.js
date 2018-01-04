@@ -31,4 +31,5 @@ getTestFiles('./test').forEach(path => mocha.addFile(path))
 
 mocha.run((failures) => {
   process.on('exit', () => process.exit(failures))
+  process.exit()
 })
