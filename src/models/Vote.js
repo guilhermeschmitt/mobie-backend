@@ -13,7 +13,7 @@ export class Vote {
   startDate = undefined
 
   //TODO: change type and make some tests
-  @Column({ type: "int" })
+  @Column({ type: "int", nullabel: true })
   endDate = undefined
 
   @PrimaryColumn({ type: "int", nullable: false })

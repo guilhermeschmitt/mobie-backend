@@ -18,7 +18,7 @@ describe('DB Model', function () {
     const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
     const savedUser = await conn.getRepository(User).save(user)
 
-    const vote = { rating: 5, user: savedUser, bookId: 'xeIoDwAAQBAJ' }
+    const vote = { rating: 5, startDate: 123, user: savedUser, bookId: 'xeIoDwAAQBAJ' }
     await conn.getRepository(Vote).save(vote)
     const foundVote = await conn.getRepository(Vote).findOneById({bookId: 'xeIoDwAAQBAJ', userId: savedUser.id}, { relations: ["user"] })
     should.equal(foundVote.userId, savedUser.id)

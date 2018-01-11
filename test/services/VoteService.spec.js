@@ -21,7 +21,7 @@ describe('VoteService', function () {
     const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
     const savedUser = await conn.getRepository(User).save(user)
 
-    const vote = { rating: 5 }
+    const vote = { rating: 5, startDate: 123 }
     const savedVote = await voteService.save(savedUser.id, 'xeIoDwAAQBAJ', vote)
 
     should.equal(savedVote.bookId, 'xeIoDwAAQBAJ')
@@ -31,7 +31,7 @@ describe('VoteService', function () {
   it('vote => should find', async () => {
     const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
     const savedUser = await conn.getRepository(User).save(user)
-    const vote = { rating: 5 }
+    const vote = { rating: 5, startDate: 123 }
     await voteService.save(savedUser.id, 'xeIoDwAAQBAJ', vote)
     const foundVote = await voteService.find(savedUser.id, 'xeIoDwAAQBAJ')
     should.equal(foundVote.bookId, 'xeIoDwAAQBAJ')
@@ -43,9 +43,9 @@ describe('VoteService', function () {
     const user = { username: 'urameshi', password: 'pass', email: 'urameshi@urameshi.com' }
     const savedUser = await conn.getRepository(User).save(user)
 
-    await voteService.save(savedUser.id, 'xeIoDwAAQBAJ', { rating: 5 })
-    await voteService.save(savedUser.id, 'xeIoDwAAQBAP', { rating: 3 })
-    await voteService.save(savedUser.id, 'xeIoDwAAQBAQ', { rating: 3 })
+    await voteService.save(savedUser.id, 'xeIoDwAAQBAJ', { rating: 5, startDate: 123 })
+    await voteService.save(savedUser.id, 'xeIoDwAAQBAP', { rating: 3, startDate: 123 })
+    await voteService.save(savedUser.id, 'xeIoDwAAQBAQ', { rating: 3, startDate: 123 })
 
     const votes = await voteService.list(savedUser.id)
     should.equal(votes[0].bookId, 'xeIoDwAAQBAJ')
